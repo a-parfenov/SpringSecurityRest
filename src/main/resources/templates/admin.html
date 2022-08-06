@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+
+    <style>
+        table th, table td {
+            padding: 10px 5px;
+            font-family: sans-serif;
+            font-size: 14px;
+            border-style: solid;
+            border-width: 1px;
+        }
+    </style>
+
+</head>
+
+<body>
+<h1>Admin page</h1>
+
+<div th:switch="${users}">
+    <h2 th:case="null">No users found!</h2>
+    <div th:case="*">
+        <h2>Users</h2>
+        <table border="1">
+            <tbody>
+            <tr>
+                <th th:width="50">UserId</th>
+                <th th:width="120">Name</th>
+                <th th:width="120">Surname</th>
+                <th th:width="120">Username</th>
+                <th th:width="150">Email</th>
+                <th th:width="150">Password</th>
+                <th th:width="50">Edit</th>
+                <th th:width="50">Delete</th>
+            </tr>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.surname}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.password}"></td>
+                <td><a th:href="@{/admin/edit/{id}(id=${user.id})}">Edit</a></td>
+                <td><a th:href="@{/admin/delete/{id}(id=${user.id})}">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+    <form th:action="@{/admin/create}">
+        <button type="submit">Create user</button>
+    </form>
+        <br>
+    <form th:action="@{/user}">
+        <button type="submit">Homepage</button>
+    </form>
+        <br>
+    <form th:action="@{/logout}">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>

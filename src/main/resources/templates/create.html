@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Create user</title>
+</head>
+<body>
+<h1>Create user page</h1>
+
+<form action="#" th:action="@{/admin}" th:object="${user}" method="post">
+    <label for="name">Name</label>
+    <input type="text" th:field="*{name}" id="name">
+    <div style="color: #fd3434" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</div>
+
+    <label for="surname">Surname</label>
+    <input type="text" th:field="*{surname}" id="surname">
+    <div style="color: #fd3434" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">surname error</div>
+
+    <label for="username">Username</label>
+    <input type="text" th:field="*{username}" id="username">
+    <div style="color: #fd3434" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username error</div>
+
+
+    <label for="email">Email</label>
+    <input type="text" th:field="*{email}" id="email">
+    <div style="color: #fd3434" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>
+
+    <label for="password">Password</label>
+    <input type="text" th:field="*{password}" id="password">
+    <div style="color: #fd3434" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</div>
+
+    <input type="submit" value="Create User">
+</form>
+<br>
+<form th:action="@{/logout}">
+    <button type="submit">Logout</button>
+</form>
+
+</body>
+</html>
