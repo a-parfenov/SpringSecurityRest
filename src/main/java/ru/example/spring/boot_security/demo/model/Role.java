@@ -20,7 +20,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "Id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name")
+    @Column(name = "role")
     private String role;
 
     @ManyToMany(mappedBy = "roles")
@@ -29,6 +29,16 @@ public class Role implements GrantedAuthority {
 
     public Role(String name) {
         this.role = name;
+    }
+
+    public Role(Long id, String role) {
+        this.id = id;
+        this.role = role;
+    }
+
+    public String getNoPrefix() {
+        String pr = "ROLE_";
+        return role.substring(pr.length());
     }
 
     @Override

@@ -2,39 +2,65 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Create user</title>
+    <title>Create</title>
+
+    <style>
+        table th, table td {
+            padding: 10px 5px;
+            font-family: sans-serif;
+            font-size: 14px;
+            border-style: solid;
+            border-width: 1px;
+        }
+    </style>
+
 </head>
 <body>
 <h1>Create user page</h1>
 
-<form action="#" th:action="@{/admin}" th:object="${user}" method="post">
+<form action="#" th:action="@{/admin/create}" th:object="${user}" method="post">
+
     <label for="name">Name</label>
-    <input type="text" th:field="*{name}" id="name">
+    <input type="text" th:field="*{name}" id="name" placeholder="Name">
     <div style="color: #fd3434" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</div>
+    <br/>
 
     <label for="surname">Surname</label>
-    <input type="text" th:field="*{surname}" id="surname">
+    <input type="text" th:field="*{surname}" id="surname" placeholder="Surname">
     <div style="color: #fd3434" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">surname error</div>
+    <br/>
 
     <label for="username">Username</label>
-    <input type="text" th:field="*{username}" id="username">
+    <input type="text" th:field="*{username}" id="username" placeholder="Username">
     <div style="color: #fd3434" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username error</div>
-
+    <br/>
 
     <label for="email">Email</label>
-    <input type="text" th:field="*{email}" id="email">
+    <input type="text" th:field="*{email}" id="email" placeholder="Email">
     <div style="color: #fd3434" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>
+    <br/>
 
     <label for="password">Password</label>
-    <input type="text" th:field="*{password}" id="password">
+    <input type="text" th:field="*{password}" id="password" placeholder="Password">
     <div style="color: #fd3434" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</div>
+    <br/>
 
+    <p>
+        <label>Roles
+            <input type="checkbox" name="roleList"
+                   th:each="rol : ${roleList}"
+                   th:text="${rol.getNoPrefix()}"
+                   th:value="${rol.role}"
+                   th:field="*{roles}"
+            />
+        </label>
+    </p>
+    <br/>
     <input type="submit" value="Create User">
 </form>
-<br>
-<form th:action="@{/logout}">
-    <button type="submit">Logout</button>
+<br/>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
 </form>
-
 </body>
 </html>

@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Admin</title>
 
     <style>
@@ -14,6 +16,7 @@
         }
     </style>
 
+
 </head>
 
 <body>
@@ -22,31 +25,48 @@
 <div th:switch="${users}">
     <h2 th:case="null">No users found!</h2>
     <div th:case="*">
-        <h2>Users</h2>
-        <table border="1">
-            <tbody>
-            <tr>
-                <th th:width="50">UserId</th>
-                <th th:width="120">Name</th>
-                <th th:width="120">Surname</th>
-                <th th:width="120">Username</th>
-                <th th:width="150">Email</th>
-                <th th:width="150">Password</th>
-                <th th:width="50">Edit</th>
-                <th th:width="50">Delete</th>
-            </tr>
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.surname}"></td>
-                <td th:text="${user.username}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.password}"></td>
-                <td><a th:href="@{/admin/edit/{id}(id=${user.id})}">Edit</a></td>
-                <td><a th:href="@{/admin/delete/{id}(id=${user.id})}">Delete</a></td>
-            </tr>
-            </tbody>
-        </table>
+<!--        <h2>Users</h2>-->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <caption style="caption-side: top;">Users</caption>
+                <thead>
+                    <tr>
+                        <th th:width="50">UserId</th>
+                        <th th:width="120">Name</th>
+                        <th th:width="120">Surname</th>
+                        <th th:width="120">Username</th>
+                        <th th:width="150">Email</th>
+                        <th th:width="150">Password</th>
+                        <th th:width="100">Roles</th>
+                        <th th:width="50">Edit</th>
+                        <th th:width="50">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.surname}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.password}"></td>
+
+                    <td>
+                        <th:block th:each="msg : ${user.getRoles()}">
+                            <li th:text="${msg.getNoPrefix()}"></li>
+                        </th:block>
+                    </td>
+
+                    <td><a th:href="@{/admin/edit/{id}(id=${user.id})}">Edit</a></td>
+                    <td><a th:href="@{/admin/delete/{id}(id=${user.id})}">Delete</a></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
         <br>
     <form th:action="@{/admin/create}">
         <button type="submit">Create user</button>
@@ -56,8 +76,9 @@
         <button type="submit">Homepage</button>
     </form>
         <br>
-    <form th:action="@{/logout}">
-        <button type="submit">Logout</button>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
     </form>
+
 </body>
 </html>

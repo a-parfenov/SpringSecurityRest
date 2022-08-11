@@ -2,16 +2,11 @@ package ru.example.spring.boot_security.demo.service;
 
 import ru.example.spring.boot_security.demo.model.Role;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import java.util.List;
 
-public class RoleService {
-    @PersistenceContext
-    private EntityManager entityManager;
+public interface RoleService {
+    List<Role> getAllRole();
+    List<Role> getByName(String name);
 
-    @Transactional
-    public void saveRole(Role role) {
-        entityManager.persist(role);
-    }
 }
+

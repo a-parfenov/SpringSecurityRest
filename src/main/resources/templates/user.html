@@ -26,10 +26,15 @@
     </tr>
     </tbody>
 </table>
+
+<th:block th:each="role: ${user_roles}">
+    <input type="checkbox" th:field="*{roles}"
+           th:text="${role.name}" th:value="${role.id}" class="m-2" />
+</th:block>
 </body>
 <br>
-<form th:action="@{/logout}">
-    <button type="submit">Logout</button>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
 </form>
 
 </html>
