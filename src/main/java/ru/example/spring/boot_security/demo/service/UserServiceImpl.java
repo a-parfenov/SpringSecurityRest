@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.example.spring.boot_security.demo.dao.UserDao;
+import ru.example.spring.boot_security.demo.dao.UserDaoImpl;
 import ru.example.spring.boot_security.demo.model.Role;
 import ru.example.spring.boot_security.demo.model.User;
 
@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao;
+    private final UserDaoImpl userDao;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao,
+    public UserServiceImpl(UserDaoImpl userDao,
                            @Lazy BCryptPasswordEncoder passwordEncoder) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
@@ -40,7 +40,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDao.add(user);
+        userDao.addUser(user);
+    }
+
+    @Transactional
+    public void createUser(User user, List<Role> roles) {
+        user.setRoles(roles);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDao.addUser(user);
     }
 
     @Transactional
@@ -49,6 +56,16 @@ public class UserServiceImpl implements UserService {
         if (!userB.getPassword().equals(user.getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
+        userDao.update(user);
+    }
+
+    @Transactional
+    public void editUser(User user, List<Role> roles) {
+        User userB = getUserById(user.getId());
+        if (!userB.getPassword().equals(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        user.setRoles(roles);
         userDao.update(user);
     }
 
@@ -75,9 +92,4 @@ public class UserServiceImpl implements UserService {
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole())).collect(Collectors.toList());
     }
-
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        return null;
-//    }
 }

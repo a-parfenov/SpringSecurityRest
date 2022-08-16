@@ -1,6 +1,5 @@
 package ru.example.spring.boot_security.demo.model;
 
-//import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,7 +48,6 @@ public class User implements UserDetails {
     @JoinTable(name="user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-//    @ToString.Exclude
     private List<Role> roles;
 
     public User() {}
@@ -163,6 +161,14 @@ public class User implements UserDetails {
 
     public List<Role> getRoles() {
         return roles;
+    }
+
+    public String getRolesStr() {
+        StringBuilder sb = new StringBuilder();
+        for (Role role : this.getRoles()) {
+            sb.append(role.getNoPrefix()).append(" ");
+        }
+        return sb.toString();
     }
 
     public void setRoles(List<Role> roles) {
