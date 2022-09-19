@@ -29,16 +29,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf()
-                .disable()
+                .csrf().disable()
                 .authorizeRequests()
                 //Доступ только для пользователей с ролью Администратор
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasAnyRole("ADMIN", "STAFF", "USER")
                 //Доступ разрешен всем пользователей
-                .antMatchers("/").permitAll()
+                .antMatchers("/", "/api","/login").permitAll()
                 //Все остальные страницы требуют аутентификации
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
                 .and()
                 //Настройка для входа в систему
                 .formLogin()
@@ -60,4 +60,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
+
 }

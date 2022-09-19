@@ -1,40 +1,84 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http:/thymeleaf">
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
-    <title>User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+          crossorigin="anonymous">
 </head>
 
-<body>
-<h1>User page</h1>
-<table border="1">
-    <tbody>
-    <tr>
-        <th th:width="50">UserId</th>
-        <th th:width="120">Name</th>
-        <th th:width="120">Surname</th>
-        <th th:width="120">Username</th>
-        <th th:width="150">Email</th>
-        <th th:width="150">Password</th>
-    </tr>
-        <td th:text="${user.id}"></td>
-        <td th:text="${user.name}"></td>
-        <td th:text="${user.surname}"></td>
-        <td th:text="${user.username}"></td>
-        <td th:text="${user.email}"></td>
-        <td th:text="${user.password}"></td>
-    </tr>
-    </tbody>
-</table>
+<body >
+<!-- Heading -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <th th:text="${user.email}"></th> with roles: <td th:text="${user.getRolesStr()}"></td></a>
+        <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-<th:block th:each="role: ${user_roles}">
-    <input type="checkbox" th:field="*{roles}"
-           th:text="${role.name}" th:value="${role.id}" class="m-2" />
-</th:block>
+<div class="container-fluid ">
+    <div class="row ">
+        <div class="col-2 bg-white pt-3 min-vh-100 px-0">
+            <div class="container-fluid px-0">
+                <ul class="nav flex-column nav-pills ">
+                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">Admin</a>
+                        </li>
+                    </div>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/user">User</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col  pt-3 h-100 min-vh-100 bg-light">
+            <!-- Admin panel -->
+            <div class="container-fluid">
+                <h1 class="display-6"><b>User information-page</b></h1>
+                <div class="container-fluid border pt-1 pb-0">
+                    <p class="text-start fs-4">About user</p>
+                </div>
+                <div class="container-fluid bg-white py-3 px-4">
+                    <table class="table table-striped border-top">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Password</th>
+                            <th scope="col">Roles</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <td th:text="${user.getId()}">VALUE</td>
+                            <td th:text="${user.getName()}">VALUE</td>
+                            <td th:text="${user.getSurname()}">VALUE</td>
+                            <td th:text="${user.getUsername()}">VALUE</td>
+                            <td th:text="${user.getEmail()}">VALUE</td>
+                            <td th:text="${user.getPassword()}">VALUE</td>
+                            <td><a th:each="role : ${user.getRoles()}" th:text="${role.getNoPrefix()} + ' '"></a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 </body>
-<br>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
-</form>
-
 </html>
