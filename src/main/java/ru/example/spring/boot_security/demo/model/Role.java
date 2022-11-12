@@ -1,6 +1,9 @@
 package ru.example.spring.boot_security.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -9,8 +12,13 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
+
     @Id
     @Column(name = "Id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,20 +26,9 @@ public class Role implements GrantedAuthority {
     @Column(name = "role")
     private String role;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
+    @ToString.Exclude
     private List<User> users;
-
-    public Role() {}
-
-    public Role(String name) {
-        this.role = name;
-    }
-
-    public Role(Long id, String role) {
-        this.id = id;
-        this.role = role;
-    }
 
     public String getNoPrefix() {
         String pr = "ROLE_";
@@ -46,7 +43,7 @@ public class Role implements GrantedAuthority {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))return false;
         Role role = (Role) o;
         return id != null && Objects.equals(id, role.id);
     }
@@ -56,23 +53,4 @@ public class Role implements GrantedAuthority {
         return getClass().hashCode();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
 }
